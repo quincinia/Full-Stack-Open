@@ -1,0 +1,27 @@
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note \nnote: form data is sent with HTTP POST
+
+note over server: 
+server adds the note to its notes 
+array then responds with a redirect
+end note
+
+server-->browser: 302 Found https://studies.cs.helsinki.fi/exampleapp/notes
+
+note over browser:
+browser performs the same operations 
+as if it had made a normal GET request
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{ content: "form data is sent with HTTP POST", date: "20XX-XX-XX" }, ...]
+
+note over browser:
+browser renders the JSON object, which
+now contains the sent over note
+end note

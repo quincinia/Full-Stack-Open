@@ -1,0 +1,25 @@
+note over browser:
+accessing the spa version of the app is 
+pretty much identical to accessing the 
+normal version, just with different URLs
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+server-->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+server-->browser: spa.js
+
+note over browser:
+browser runs js-code which makes
+a request for the JSON file
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{ content: "XXXX", date: "20XX-XX-XX" }, ...]
+
+note over browser:
+once the data arrives, the event 
+handler will render it to the page
+end note

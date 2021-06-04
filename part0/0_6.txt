@@ -1,0 +1,25 @@
+note over browser:
+upon submission, the browser will extract 
+the input from the text box, generate a new 
+note from it and add it to its internal array, 
+then reset the text input, rerender the notes, 
+and send over the note to the server
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note \nContent-type: application/json\nPayload: {content: "XXXX", date: date: "20XX-XX-XX"}
+server-->browser: 201 Created \nPayload: {"message":"note created"}
+
+note over browser:
+if the server message is received correctly, 
+the browser will log it to the console
+end note 
+
+note over browser:
+sidenote: one difference between the spa version
+and the normal version is that the spa version
+can display more than 100 notes because when 
+adding a new note, the oldest note is not thrown
+away; in the normal version of the app, the server
+will only return the 100 most recent notes for 
+rendering
+end note
