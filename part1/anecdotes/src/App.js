@@ -1,5 +1,16 @@
 import React, { useState } from 'react'
 
+const Display = (props) => {
+  let { title, content, votes } = props
+  return (
+    <>
+      <h1>{title}</h1>
+      <div>{content}</div>
+      <div>has {votes} votes</div>
+    </>
+  )
+}
+
 // generates an int from [min, max]
 function genInt(min, max) {
   min = Math.ceil(min)
@@ -35,19 +46,30 @@ const App = () => {
     setVotes(copy)
   }
 
-  
+  // index of anecdote with most votes
+  let mostVotes = votes.reduce((acc, item, index) => (votes[index] > votes[acc]) ? index : acc, 0)
+
 
   return (
     <div>
-      {anecdotes[selected]}
-      <br />
-      has {votes[selected]} votes
+      <Display 
+        title="Anecdote of the day" 
+        content={anecdotes[selected]}
+        votes={votes[selected]}
+      />
       <div>
-      <button onClick={() => voteFor(selected)}>vote</button>
+        <button onClick={() => voteFor(selected)}>
+          vote
+        </button>
         <button onClick={() => setSelected(genExcept(selected))}>
           next anecdote
         </button>
       </div>
+      <Display
+        title="Anecdote with the most votes"
+        content={anecdotes[mostVotes]}
+        votes={votes[mostVotes]}
+      />
     </div>
 
   )
