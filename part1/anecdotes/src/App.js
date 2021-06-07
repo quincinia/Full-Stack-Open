@@ -19,12 +19,32 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+
+  // so that a different quote is displayed every time
+  const genExcept = (i) => {
+    let newIndex = genInt(0, anecdotes.length-1)
+    while (newIndex === selected)
+      newIndex = genInt(0, anecdotes.length-1)
+    return newIndex
+  }
+
+  const voteFor = (i) => {
+    const copy = [...votes]
+    copy[i]++
+    setVotes(copy)
+  }
+
+  
 
   return (
     <div>
       {anecdotes[selected]}
+      <br />
+      has {votes[selected]} votes
       <div>
-        <button onClick={() => setSelected(genInt(0, anecdotes.length-1))}>
+      <button onClick={() => voteFor(selected)}>vote</button>
+        <button onClick={() => setSelected(genExcept(selected))}>
           next anecdote
         </button>
       </div>
