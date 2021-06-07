@@ -1,5 +1,12 @@
 import React, { useState } from 'react'
 
+// generates an int from [min, max]
+function genInt(min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -16,7 +23,13 @@ const App = () => {
   return (
     <div>
       {anecdotes[selected]}
+      <div>
+        <button onClick={() => setSelected(genInt(0, anecdotes.length-1))}>
+          next anecdote
+        </button>
+      </div>
     </div>
+
   )
 }
 
