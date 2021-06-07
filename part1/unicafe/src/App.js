@@ -8,25 +8,34 @@ const Button = (props) => {
   )
 }
 
+const Statistic = (props) => {
+  return (
+    <div>
+      {props.text} {props.value} {props.text === "positive" ? "%" : ""}
+    </div>
+  )
+}
+
 const Statistics = (props) => {
   let { good, neutral, bad } = props
   let all = good + neutral + bad
-  return (
+  if (all === 0) return (
     <>
       <h1>statistics</h1>
       <div>
-        good {good}
-        <br />
-        neutral {neutral}
-        <br />
-        bad {bad}
-        <br />
-        all {all}
-        <br />
-        average {(good - bad) / all}
-        <br />
-        positive {good * 100 / all} %
+        No feedback given
       </div>
+    </>
+  )
+  return (
+    <>
+      <h1>statistics</h1>
+      <Statistic text="good" value={good} />
+      <Statistic text="neutral" value={neutral} />
+      <Statistic text="bad" value={bad} />
+      <Statistic text="all" value={all} />
+      <Statistic text="average" value={(good - bad) / all} />
+      <Statistic text="positive" value={good * 100 / all} />
     </>
   )
 }
@@ -37,24 +46,10 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
-  // used for 1.7
-  /* 
-  const generateStats = () => {
-    let all = good + neutral + bad
-    return {
-      all: all,
-      average: (good - bad) / all,
-      positive: good * 100 / all 
-    }
-  }
-
-  const stats = generateStats()
-  */
- 
   return (
     <div>
       <h1>give feedback</h1>
-      {/* actually not needed bc buttons stack horizontally */}
+      {/* id not needed bc buttons stack horizontally */}
       <div id="button-container"> 
         <Button text="good" handleClick={() => setGood(good + 1)}/>
         <Button text="neutral" handleClick={() => setNeutral(neutral + 1)}/>
