@@ -19,7 +19,11 @@ const CountryInfo = (props) => {
                     <li key={index}>{language}</li>
                 ))}
             </ul>
-            <img src={flag} alt={`flag of ${name}`} />
+            <img
+                src={flag}
+                alt={`flag of ${name}`}
+                style={{ width: "100px" }}
+            />
         </div>
     )
 }
