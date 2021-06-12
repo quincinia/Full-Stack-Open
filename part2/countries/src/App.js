@@ -6,33 +6,65 @@ const SizeError = (props) => {
 }
 
 const CountryInfo = (props) => {
-    let { name, capital, population, languages, flag } = props
-    return (
-        <div id="country-info">
-            <h1>{name}</h1>
-            capital {capital}
-            <br />
-            population {population}
-            <h2>languages</h2>
-            <ul>
-                {languages.map((language, index) => (
-                    <li key={index}>{language}</li>
-                ))}
-            </ul>
-            <img
-                src={flag}
-                alt={`flag of ${name}`}
-                style={{ width: "100px" }}
-            />
-        </div>
-    )
+    let { name, capital, population, languages, flag, useButton, startOpen } =
+        props
+
+    const [showInfo, setInfoToggle] = useState(startOpen)
+
+    const buttonToggle = () => {
+        setInfoToggle(!showInfo)
+    }
+
+    if (showInfo === true) {
+        return (
+            <div id="country-info">
+                <h1>
+                    {name}{" "}
+                    {useButton ? (
+                        <button onClick={buttonToggle}>hide</button>
+                    ) : null}
+                </h1>
+                capital {capital}
+                <br />
+                population {population}
+                <h2>languages</h2>
+                <ul>
+                    {languages.map((language, index) => (
+                        <li key={index}>{language}</li>
+                    ))}
+                </ul>
+                <img
+                    src={flag}
+                    alt={`flag of ${name}`}
+                    style={{ width: "100px" }}
+                />
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                {name} <button onClick={buttonToggle}>show</button>
+            </div>
+        )
+    }
 }
 
 const CountriesList = (props) => {
     return (
         <div>
             {props.list.map((country, index) => (
-                <div key={index}>{country.name}</div>
+                <CountryInfo
+                    key={index}
+                    name={country.name}
+                    capital={country.capital}
+                    population={country.population}
+                    languages={country.languages.map(
+                        (language) => language.name
+                    )}
+                    flag={country.flag}
+                    useButton={true}
+                    startOpen={false}
+                />
             ))}
         </div>
     )
@@ -80,6 +112,8 @@ const App = () => {
                 population={country.population}
                 languages={country.languages.map((language) => language.name)}
                 flag={country.flag}
+                useButton={false}
+                startOpen={true}
             />
         )
     } else {
