@@ -6,10 +6,36 @@ const SizeError = (props) => {
 }
 
 const CountryInfo = (props) => {
-    let { name, capital, population, languages, flag, useButton, startOpen } =
-        props
+    let {
+        name,
+        capital,
+        population,
+        languages,
+        flag,
+        useButton,
+        startOpen,
+        findWeather,
+    } = props
 
     const [showInfo, setInfoToggle] = useState(startOpen)
+
+    // initialized to null because an empty object is truthy
+    const [weather, setWeather] = useState(null)
+
+    // grab weather for selected country
+    const weatherHook = () => {
+        if (findWeather === true) {
+            axios
+                .get(
+                    `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_WEATHER_API_KEY}&query=${capital}`
+                )
+                .then((response) => {
+                    console.log(response.data)
+                    setWeather(response.data)
+                })
+        }
+    }
+    useEffect(weatherHook, [findWeather, capital])
 
     const buttonToggle = () => {
         setInfoToggle(!showInfo)
@@ -38,6 +64,22 @@ const CountryInfo = (props) => {
                     alt={`flag of ${name}`}
                     style={{ width: "100px" }}
                 />
+                {weather ? (
+                    <div>
+                        <h2>Weather in {capital}</h2>
+                        <b>temperature: </b>
+                        {weather.current.temperature} Celsius
+                        <br />
+                        <img
+                            src={weather.current.weather_icons[0]}
+                            alt="pictorial of current weather"
+                        />
+                        <br />
+                        <b>wind: </b>
+                        {weather.current.wind_speed} km/h{" "}
+                        {weather.current.wind_dir}
+                    </div>
+                ) : null}
             </div>
         )
     } else {
@@ -64,6 +106,7 @@ const CountriesList = (props) => {
                     flag={country.flag}
                     useButton={true}
                     startOpen={false}
+                    findWeather={false}
                 />
             ))}
         </div>
@@ -75,14 +118,14 @@ const App = () => {
     const [nameFilter, setNameFilter] = useState("")
 
     // grab data
-    const hook = () => {
+    const countryHook = () => {
         console.log("Grabbing countries...")
         axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
             console.log("Received!")
             setCountries(response.data)
         })
     }
-    useEffect(hook, [])
+    useEffect(countryHook, [])
 
     // filter handler
     const handleFilterChange = (event) => {
@@ -114,6 +157,7 @@ const App = () => {
                 flag={country.flag}
                 useButton={false}
                 startOpen={true}
+                findWeather={true}
             />
         )
     } else {
