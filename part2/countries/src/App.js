@@ -25,9 +25,10 @@ const CountryInfo = (props) => {
     // grab weather for selected country
     const weatherHook = () => {
         if (findWeather === true) {
+            console.log("Grabbing weather...")
             axios
                 .get(
-                    `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_WEATHER_API_KEY}&query=${capital}`
+                    `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_WEATHER_API_KEY2}&query=${capital}`
                 )
                 .then((response) => {
                     console.log(response.data)
@@ -76,7 +77,7 @@ const CountryInfo = (props) => {
                         />
                         <br />
                         <b>wind: </b>
-                        {weather.current.wind_speed} km/h{" "}
+                        {weather.current.wind_speed} km/h direction{" "}
                         {weather.current.wind_dir}
                     </div>
                 ) : null}
