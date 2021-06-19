@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react"
 import personService from "./services/persons"
 
+const Notification = (props) => {
+    const { message, type } = props.message
+    if (message === null) {
+        return null
+    }
+    console.log("message type: ", type)
+    return <div className={type}>{message}</div>
+}
+
 const Filter = (props) => {
     return (
         <div>
@@ -50,6 +59,10 @@ const App = () => {
     const [newName, setNewName] = useState("")
     const [newNumber, setNewNumber] = useState("")
     const [nameFilter, setNameFilter] = useState("")
+    const [notifMessage, setNotifMessage] = useState({
+        message: null,
+        type: null,
+    })
 
     const hook = () => {
         console.log("Grabbing data from server")
@@ -95,14 +108,40 @@ const App = () => {
                             )
                         )
                     )
+                    .catch((error) => {
+                        setNotifMessage({
+                            message: `Information of ${newName} has already been removed from server`,
+                            type: "error",
+                        })
+                        // remove this person from local array
+                        setPersons(
+                            persons.filter((item) => item.id !== person.id)
+                        )
+                        setTimeout(() => {
+                            setNotifMessage({
+                                message: null,
+                                type: null,
+                            })
+                        }, 5000)
+                    })
             }
         } else {
             personService
                 .create({ name: newName, number: newNumber })
                 .then((newPerson) => {
                     setPersons(persons.concat(newPerson))
+                    setNotifMessage({
+                        message: `Added ${newName}`,
+                        type: "success",
+                    })
                     setNewName("")
                     setNewNumber("")
+                    setTimeout(() => {
+                        setNotifMessage({
+                            message: null,
+                            type: null,
+                        })
+                    }, 5000)
                 })
         }
     }
@@ -125,6 +164,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={notifMessage} />
             <Filter value={nameFilter} onChange={handleFilterChange} />
             <h2>add a new</h2>
             <PersonForm
